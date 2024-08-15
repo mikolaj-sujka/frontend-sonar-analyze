@@ -35,7 +35,7 @@ jobs:
     - name: Run SonarCloud Scan for Frontend
       uses: sonarsource/sonarcloud-github-action@master
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         args: >
           -Dsonar.organization=mikolaj-sujka
