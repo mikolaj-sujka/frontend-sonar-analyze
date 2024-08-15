@@ -1,0 +1,44 @@
+name: SonarCloud Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+
+  sonarcloud-frontend:
+    runs-on: ubuntu-latest
+    name: Analyze Frontend Project
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Cache Node modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node
+
+    - name: Run SonarCloud Scan for Frontend
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+      with:
+        args: >
+          -Dsonar.organization=mikolaj-sujka
+          -Dsonar.projectKey=mikolaj-sujka_frontend-sonar-analyze
+          -Dsonar.sources=.
+          -Dsonar.host.url=https://sonarcloud.io
